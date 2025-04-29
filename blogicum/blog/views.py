@@ -1,5 +1,4 @@
 from django.shortcuts import render
-# from .models import Post
 from django.http import Http404
 
 # Список постов
@@ -47,24 +46,23 @@ posts = [
 ]
 
 
+posts_dict = {post['id']: post for post in posts}
+
+
 def index(request):
-    reversed_posts = list(reversed(posts))
-    return render(request, 'blog/index.html', {'posts': reversed_posts})
+    return render(request, 'blog/index.html', {'posts': reversed(posts)})
 
 
 def post_detail(request, id):
-    post = next((post for post in posts if post['id'] == id), None)
+    post = posts_dict.get(id)
     if post is None:
-        raise Http404("Post not found.")
+        raise Http404(f"Пост с id={id} не найден.")
     return render(request, 'blog/detail.html', {'post': post})
 
 
 def category_posts(request, category_slug):
-    filtered_posts = [
-        post for post in posts if post['category'] == category_slug
-    ]
     context = {
-        'posts': filtered_posts,
+        'posts': [post for post in posts if post['category'] == category_slug],
         'slug': category_slug
     }
     return render(request, 'blog/category.html', context)
