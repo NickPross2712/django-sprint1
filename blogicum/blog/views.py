@@ -1,5 +1,5 @@
-from django.shortcuts import render
 from django.http import Http404
+from django.shortcuts import render
 
 # Список постов
 posts = [
@@ -61,8 +61,4 @@ def post_detail(request, id):
 
 
 def category_posts(request, category_slug):
-    context = {
-        'posts': [post for post in posts if post['category'] == category_slug],
-        'slug': category_slug
-    }
-    return render(request, 'blog/category.html', context)
+    return render(request, 'blog/category.html', {'slug': category_slug})
